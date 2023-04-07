@@ -7,6 +7,5 @@ module.exports = (server) => {
   server
     .route("/comments/:id")
     .delete(commentController.deletecomments)
-    // .get(commentController.getcomment)
     .put(commentController.updatecomments);
 };

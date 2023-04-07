@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../app'); // Votre application Express
+const App = require('../../app');
 const User = require('../models/userModel');
 const mongoose = require('mongoose');
 
@@ -25,7 +25,7 @@ describe('Tests pour le contrôleur userController', () => {
 
   describe('POST /user/register', () => {
     it('devrait créer un nouvel utilisateur', async () => {
-      const res = await request(app)
+      const res = await request(App)
         .post('/user/register')
         .send({
           email: 'newuser@test.com',
@@ -37,7 +37,7 @@ describe('Tests pour le contrôleur userController', () => {
     });
 
     it('devrait renvoyer une erreur 401 si l\'email est manquant', async () => {
-      const res = await request(app)
+      const res = await request(App)
         .post('/user/register')
         .send({ email: 'test@test.com', password: 'password' });
 
@@ -46,7 +46,7 @@ describe('Tests pour le contrôleur userController', () => {
     });
 
     it('devrait renvoyer une erreur 401 si le mot de passe est manquant', async () => {
-      const res = await request(app)
+      const res = await request(App)
         .post('/user/register')
         .send({ email: 'test@test.com' });
 
@@ -57,7 +57,7 @@ describe('Tests pour le contrôleur userController', () => {
 
   describe('POST /user/login', () => {
     it('devrait renvoyer un token JWT valide pour un utilisateur existant', async () => {
-      const res = await request(app)
+      const res = await request(App)
         .post('/user/login')
         .send({
           email: 'test@test.com',
@@ -75,7 +75,7 @@ describe('Tests pour le contrôleur userController', () => {
     });
 
     it('devrait renvoyer une erreur 401 si l\'utilisateur n\'existe pas', async () => {
-      const res = await request(app)
+      const res = await request(App)
         .post('/user/login')
         .send({
           email: 'nonexistent@test.com',
@@ -87,7 +87,7 @@ describe('Tests pour le contrôleur userController', () => {
     });
 
     it('devrait renvoyer une erreur 401 si le mot de passe est incorrect', async () => {
-      const res = await request(app)
+      const res = await request(App)
         .post('/user/login')
         .send({
           email: 'test@test.com',
