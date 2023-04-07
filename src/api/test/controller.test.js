@@ -9,6 +9,52 @@ const mongoose = require("mongoose");
 let postId;
 let commTest;
 let dbURI = process.env.DBTEST;
+describe("postController", () => {
+  //execute before all tests, connection bd ans create a test comm
+  beforeAll(async () => {
+    await mongoose.connect(dbURI, { useNewUrlParser: true });
+  });
+  //after all tests delete test data, close db connection
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
+  //test post creation
+  describe("createPost", () => {
+    it("should create a new post", async () => {
+      const response = await request.post(`/posts`).send({
+        title: "test title",
+        des: "new desc",
+      });
+
+      expect(response.status).toBe(201);
+      expect(response.body.title).toBe("test title");
+      expect(response.body.des).toBe("new desc");
+
+      postId = response.body._id;
+    });
+  });
+
+  //test post update
+  describe("updatePosts", () => {
+    it("should update post", async () => {
+      const response = await request
+        .put(`/posts/${postId}`)
+        .send({ content: "updated desc" });
+      expect(response.status).toBe(200);
+      expect(response.body.title).toBe("test title");
+      expect(response.body.des).toBe("updated desc");
+    });
+  });
+
+  //test delete post
+  describe("deletePosts", () => {
+    it("should delete all posts", async () => {
+      const response = await request.delete(`/posts`);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ n: 1, ok: 1, deletedCount: 1 });
+    });
+  });
+});
 
 describe("commentController", () => {
   //execute before all tests, connection bd ans create a test comm
