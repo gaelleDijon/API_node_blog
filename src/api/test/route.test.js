@@ -12,6 +12,7 @@ describe("Comment routes", () => {
       title: "Test post",
       des: "test post desc",
     });
+    postId = response.body._id;
   });
 
   // delete all comments and the post after the tests
@@ -67,14 +68,14 @@ describe("Comment routes", () => {
     });
   });
 
-  describe("DELETE /comments", () => {
-    it("should delete all comments", async () => {
+  describe(`DELETE /comments/${post._id}`, () => {
+    it("should delete all comments from a post", async () => {
       const comm1 = await commentModel.create({
         names: "Test comm 1",
         content: "test content 1",
         post: post._id,
       });
-      const comm = await commentModel.create({
+      const comm2 = await commentModel.create({
         names: "Test Comment 2",
         content: "test content 2",
         post: post._id,
